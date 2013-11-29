@@ -53,12 +53,12 @@ engine_requests["npm"]=$(package_engine_version "npm")
 echo "-----> Resolving engine versions"
 
 # add a warning if no version of node specified
-if [ "${engine_requests["node"]}" == "" ]; then
-  echo
-  echo "WARNING: No version of Node.js specified in package.json, see:" | indent
-  echo "https://devcenter.heroku.com/articles/nodejs-support#versions" | indent
-  echo
-fi
+#if [ "${engine_requests["node"]}" == "" ]; then
+#  echo
+#  echo "WARNING: No version of Node.js specified in package.json, see:" | indent
+#  echo "https://devcenter.heroku.com/articles/nodejs-support#versions" | indent
+#  echo
+#fi
 
 NODE_VERSION=$(package_resolve_version "node")
 echo "Using Node.js version: ${NODE_VERSION}" | indent
@@ -67,8 +67,8 @@ NPM_VERSION=$(package_resolve_version "npm")
 echo "Using npm version: ${NPM_VERSION}" | indent
 
 # cache directories
-CACHE_STORE_DIR="$CACHE_DIR/node_modules/$NODE_VERSION/$NPM_VERSION"
-CACHE_TARGET_DIR="$BUILD_DIR/node_modules"
+CACHE_STORE_DIR="$CACHE_DIR/$UI_FILES/node_modules/$NODE_VERSION/$NPM_VERSION"
+CACHE_TARGET_DIR="$BUILD_DIR/$UI_FILES/node_modules"
 
 # s3 packages
 NODE_PACKAGE="http://${S3_BUCKET}.s3.amazonaws.com/nodejs-${NODE_VERSION}.tgz"
@@ -87,10 +87,10 @@ package_download "npm" "${NPM_VERSION}" "${VENDORED_NPM}"
 package_download "scons" "${SCONS_VERSION}" "${VENDORED_SCONS}"
 
 # vendor node into the slug
-PATH="$BUILD_DIR/bin:$PATH"
+PATH="$BUILD_DIR/$UI_FILES/bin:$PATH"
 echo "-----> Vendoring node into slug"
-mkdir -p "$BUILD_DIR/bin"
-cp "$VENDORED_NODE/bin/node" "$BUILD_DIR/bin/node"
+mkdir -p "$BUILD_DIR/$UI_FILES/bin"
+cp "$VENDORED_NODE/bin/node" "$BUILD_DIR/$UI_FILES/bin/node"
 
 # setting up paths for building
 PATH="$VENDORED_SCONS:$VENDORED_NODE/bin:$PATH"
@@ -99,7 +99,7 @@ export CPATH="$INCLUDE_PATH:$CPATH"
 export CPPPATH="$INCLUDE_PATH:$CPPPATH"
 
 # install dependencies with npm
-echo "-----> Build dir is $BUILD_DIR"
+echo "-----> Build dir in UI folder is $BUILD_DIR/$UI_FILES"
 echo "-----> Installing dependencies with npm"
 run_npm "install --production"
 run_npm "install -g yo"

@@ -4,7 +4,7 @@
 
 function printStructure {
     echo "------> Folder structure in BUILD_DIR is: "
-    echo `ls -l ${BUILD_DIR}`
+    ls -l ${BUILD_DIR}
 }
 
 function error {
