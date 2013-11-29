@@ -1,5 +1,100 @@
 #!/usr/bin/env bash
 
+###### Yeoman Setup START #####
+
+function error() {
+  echo " !     $*" >&2
+  exit 1
+}
+
+function mktmpdir() {
+  dir=$(mktemp -t node-$1-XXXX)
+  rm -rf $dir
+  mkdir -p $dir
+  echo $dir
+}
+
+function indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
+
+function run_npm() {
+  command="$1"
+
+  cd $BUILD_DIR
+  HOME="$BUILD_DIR" $VENDORED_NODE/bin/node $VENDORED_NPM/cli.js $command 2>&1 | indent
+
+  if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+    echo " !     Failed to $command dependencies with npm"
+    exit 1
+  fi
+}
+
+function manifest_versions() {
+  curl "http://${S3_BUCKET}.s3.amazonaws.com/manifest.${1}" -s -o - | tr -s '\n' ' '
+}
+
+function resolve_version() {
+  available_versions="$1"
+  requested_version="$2"
+  default_version="$3"
+
+  args=""
+  for version in $available_versions; do args="${args} -v \"${version}\""; done
+
+  if [ "$2" == "" ]; then
+    args="${args} -r \"${default_version}\"";
+  else
+    args="${args} -r \"${requested_version}\"";
+  fi
+
+  evaluated_versions=$(eval $bootstrap_node/bin/node $LP_DIR/vendor/node-semver/bin/semver ${args} || echo "")
+  echo "$evaluated_versions" | tail -n 1
+}
+
+function package_engine_version() {
+  version=$(cat $BUILD_DIR/package.json | $bootstrap_node/bin/node $LP_DIR/vendor/json/json engines.$1 2>/dev/null)
+  if [ $? == 0 ]; then
+    echo $version | sed -e 's/\([<>=]\) /\1/g'
+  fi
+}
+
+function package_resolve_version() {
+  engine="$1"
+  resolved_version=$(resolve_version "${engine_versions[$engine]}" "${engine_requests[$engine]}" "${engine_defaults[$engine]}")
+
+  if [ "${resolved_version}" == "" ]; then
+    error "Requested engine $engine version ${engine_requests[$engine]} does not match available versions: ${engine_versions[$engine]}"
+  else
+    echo $resolved_version
+  fi
+}
+
+function package_download() {
+  engine="$1"
+  version="$2"
+  location="$3"
+
+  mkdir -p $location
+  package="http://${S3_BUCKET}.s3.amazonaws.com/$engine-$version.tgz"
+  curl $package -s -o - | tar xzf - -C $location
+}
+
+function cat_npm_debug_log() {
+  if [ -f $BUILD_DIR/npm-debug.log ]; then
+    cat $BUILD_DIR/npm-debug.log
+  fi
+}
+
+
+###### Yeoman Setup END #####
+
+###### SBT Setup START #####
+
 ## SBT 0.10 allows either *.sbt in the root dir, or project/*.scala or .sbt/*.scala
 detect_sbt() {
   local ctxDir=$1
@@ -115,7 +210,5 @@ universal_packaging_default_web_proc() {
   fi
 }
 
-error() {
-    echo " !     $1"
-    exit 1
-}
+
+###### SBT Setup END #####
