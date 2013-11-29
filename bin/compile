@@ -18,14 +18,14 @@ S3_BUCKET="heroku-buildpack-nodejs"
 
 # parse and derive params
 UI_FILES="ui"
-BUILD_DIR=$1
-CACHE_DIR=$2
-LP_DIR=`cd $(dirname $0); cd ..; pwd`
-
 BP_DIR=$(cd $(dirname $0)/..; pwd) # absolute path
 BIN_DIR=$BP_DIR/bin
 OPT_DIR=$BP_DIR/opt
 . $BIN_DIR/common
+
+# parse args
+BUILD_DIR=$(cd $1; pwd)
+CACHE_DIR=$2
 
 trap cat_npm_debug_log EXIT
 
@@ -127,15 +127,6 @@ echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.
 ###### Yeoman Setup END #####
 
 ###### SBT Setup START #####
-
-BP_DIR=$(cd $(dirname $0)/..; pwd) # absolute path
-BIN_DIR=$BP_DIR/bin
-OPT_DIR=$BP_DIR/opt
-. $BIN_DIR/common
-
-# parse args
-BUILD_DIR=$(cd $1; pwd)
-CACHE_DIR=$2
 
 curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz | tar xz
 . bin/java
