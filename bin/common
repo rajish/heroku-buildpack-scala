@@ -2,6 +2,11 @@
 
 ###### Yeoman Setup START #####
 
+function printStructure {
+    echo "------> Folder structure in BUILD_DIR is: "
+    echo `ls -l ${BUILD_DIR}`
+}
+
 function error {
   echo " !     $*" >&2
   exit 1

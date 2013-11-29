@@ -29,6 +29,8 @@ CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 LP_DIR="${LP_DIR}/${UI_FILES}"
 
+printStructure
+
 trap cat_npm_debug_log EXIT
 
 bootstrap_node=$(mktmpdir bootstrap_node)
