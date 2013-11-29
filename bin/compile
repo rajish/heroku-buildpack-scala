@@ -26,7 +26,7 @@ S3_BUCKET="heroku-buildpack-nodejs"
 UI_FILES="ui"
 BUILD_DIR=$1/${UI_FILES}
 CACHE_DIR=$2/${UI_FILES}
-LP_DIR=`cd $(dirname $0); cd ..; pwd`
+LP_DIR=`cd $(dirname "$0/${UI_FILES}"); cd ..; pwd`
 
 trap cat_npm_debug_log EXIT
 
