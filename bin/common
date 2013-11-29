@@ -2,8 +2,7 @@
 
 ###### Yeoman Setup START #####
 
-function error() {
-  echo " !     $*" >&2
+function er${BUILD_DIR}echo " !     $*" >&2
   exit 1
 }
 
@@ -25,8 +24,8 @@ function indent() {
 function run_npm() {
   command="$1"
 
-  cd "${BUILD_DIR}/ui"
-  HOME="${BUILD_DIR}/ui" $VENDORED_NODE/bin/node $VENDORED_NPM/cli.js $command 2>&1 | indent
+  cd "${BUILD_DIR}/${UI_FILES}"
+  HOME="${BUILD_DIR}/${UI_FILES}" $VENDORED_NODE/bin/node $VENDORED_NPM/cli.js $command 2>&1 | indent
 
   if [ "${PIPESTATUS[*]}" != "0 0" ]; then
     echo " !     Failed to $command dependencies with npm"
@@ -57,7 +56,7 @@ function resolve_version() {
 }
 
 function package_engine_version() {
-  version=$(cat $BUILD_DIR/ui/package.json | $bootstrap_node/bin/node $LP_DIR/vendor/json/json engines.$1 2>/dev/null)
+  version=$(cat ${BUILD_DIR}/${UI_FILES}/package.json | $bootstrap_node/bin/node $LP_DIR/vendor/json/json engines.$1 2>/dev/null)
   if [ $? == 0 ]; then
     echo $version | sed -e 's/\([<>=]\) /\1/g'
   fi
@@ -85,8 +84,8 @@ function package_download() {
 }
 
 function cat_npm_debug_log() {
-  if [ -f $BUILD_DIR/ui/npm-debug.log ]; then
-    cat $BUILD_DIR/ui/npm-debug.log
+  if [ -f ${BUILD_DIR}/${UI_FILES}/npm-debug.log ]; then
+    cat ${BUILD_DIR}/${UI_FILES}/npm-debug.log
   fi
 }
 

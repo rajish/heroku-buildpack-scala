@@ -12,12 +12,6 @@ set -e
 # clean up leaking environment
 unset GIT_DIR
 
-BP_DIR=$(cd $(dirname $0)/..; pwd) # absolute path
-BIN_DIR=$BP_DIR/bin
-OPT_DIR=$BP_DIR/opt
-. $BIN_DIR/common
-
-
 # config
 SCONS_VERSION="1.2.0"
 S3_BUCKET="heroku-buildpack-nodejs"
@@ -27,6 +21,11 @@ UI_FILES="ui"
 BUILD_DIR=$1
 CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
+
+BP_DIR=$(cd $(dirname $0)/..; pwd) # absolute path
+BIN_DIR=$BP_DIR/bin
+OPT_DIR=$BP_DIR/opt
+. $BIN_DIR/common
 
 trap cat_npm_debug_log EXIT
 
@@ -38,8 +37,8 @@ declare -A engine_versions
 declare -A engine_defaults
 declare -A engine_requests
 
-engine_defaults["node"]="0.10.21"
-engine_defaults["npm"]="1.3.5"
+engine_defaults["node"]="0.10.x"
+engine_defaults["npm"]="1.3.x"
 
 engine_versions["node"]=$(manifest_versions "nodejs")
 engine_requests["node"]=$(package_engine_version "node")
