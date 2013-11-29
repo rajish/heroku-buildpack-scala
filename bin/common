@@ -2,7 +2,8 @@
 
 ###### Yeoman Setup START #####
 
-function er${BUILD_DIR}echo " !     $*" >&2
+function error {
+  echo " !     $*" >&2
   exit 1
 }
 
@@ -85,7 +86,7 @@ function package_download() {
 
 function cat_npm_debug_log() {
   if [ -f ${BUILD_DIR}/${UI_FILES}/npm-debug.log ]; then
-    cat ${BUILD_DIR}/${UI_FILES}/npm-debug.log
+    cat ${BUILDBUILD_DIR}_DIR}/${UI_FILES}/npm-debug.log
   fi
 }
 
