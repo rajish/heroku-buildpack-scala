@@ -27,6 +27,7 @@ OPT_DIR=$BP_DIR/opt
 BUILD_DIR=$(cd $1; pwd)
 CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
+LP_DIR="${LP_DIR}/${UI_FILES}"
 
 trap cat_npm_debug_log EXIT
 
