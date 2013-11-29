@@ -115,7 +115,7 @@ if [ -f $BUILD_DIR/$UI_FILES/bower.json ]; then
   # make sure that bower is installed locally
   run_npm "install bower"
   echo "-----> Found bower.json, running bower install"
-  $BUILD_DIR/$UI_FILES/node_modules/.bin/bower install
+  $BUILD_DIR/$UI_FILES/node_modules/.bin/bower install -g
 else
   echo "-----> No Bower.json found"
 fi
