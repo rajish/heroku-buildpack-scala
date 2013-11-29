@@ -122,9 +122,9 @@ fi
 
 if [ -f $BUILD_DIR/$UI_FILES/grunt.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.coffee ]; then
   #make sure that grunt-cli and bower are installed locally
-  run_npm "install grunt-cli"
+  run_npm "install -g grunt-cli"
   echo "-----> Found Gruntfile, running grunt task"
-#  $BUILD_DIR/$UI_FILES/node_modules/.bin/grunt
+  $BUILD_DIR/$UI_FILES/node_modules/.bin/grunt
 else
   echo "-----> No Gruntfile (grunt.js, Gruntfile.js, Gruntfile.coffee) found"
 fi
@@ -198,7 +198,7 @@ SBT_PROPS_URL="http://s3.amazonaws.com/heroku-jvm-langpack-scala/$SBT_PROPS"
 ## in 0.10 start-script will depend on package, if packaging
 ## is required - it may not be, we can run .class files or a package-war
 ## instead.
-SBT_TASKS="clean compile grunt stage"
+SBT_TASKS="clean grunt compile stage"
 
 
 if [ ! -d .ivy2/cache ]; then
