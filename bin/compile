@@ -114,7 +114,7 @@ echo "Dependencies installed" | indent
 if [ -f $BUILD_DIR/$UI_FILES/bower.json ]; then
   # make sure that bower is installed locally
   run_npm "install bower"
-  echo "-----> Found bower.json, running bower install"
+  echo "-----> Found bower.json, running bower install -g"
   $BUILD_DIR/$UI_FILES/node_modules/.bin/bower install -g
 else
   echo "-----> No Bower.json found"
@@ -124,7 +124,7 @@ if [ -f $BUILD_DIR/$UI_FILES/grunt.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.j
   #make sure that grunt-cli and bower are installed locally
   run_npm "install grunt-cli"
   echo "-----> Found Gruntfile, running grunt task"
-  $BUILD_DIR/$UI_FILES/node_modules/.bin/grunt
+#  $BUILD_DIR/$UI_FILES/node_modules/.bin/grunt
 else
   echo "-----> No Gruntfile (grunt.js, Gruntfile.js, Gruntfile.coffee) found"
 fi
