@@ -116,7 +116,13 @@ run_npm "rebuild"
 
 # install compass
 echo "-----> Installing compass"
-gem install compass
+# install compass
+export GEM_HOME=$CACHE_DIR/ruby/.gem/ruby/1.9.1
+PATH="$GEM_HOME/bin:$PATH"
+if [ ! -f $GEM_HOME/bin/compass ]; then
+  mkdir -p $CACHE_DIR/ruby
+  HOME="$CACHE_DIR/ruby" gem install compass --user-install --no-rdoc --no-ri
+fi
 
 mkdir -p $BUILD_DIR/.profile.d
 echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
