@@ -106,10 +106,12 @@ export CPPPATH="$INCLUDE_PATH:$CPPPATH"
 # install dependencies with npm
 echo "-----> Build dir in UI folder is $BUILD_DIR/$UI_FILES"
 echo "-----> Installing dependencies with npm"
-run_npm "install --production"
+cd $BUILD_DIR/$UI_FILES
+run_npm "install"
 run_npm "install -g yo"
 run_npm "install -g grunt"
 run_npm "install -g grunt-cli"
+run_npm "install -g bower"
 run_npm "rebuild"
 
 mkdir -p $BUILD_DIR/.profile.d
@@ -118,7 +120,7 @@ echo "Dependencies installed" | indent
 
 if [ -f $BUILD_DIR/$UI_FILES/bower.json ]; then
   # make sure that bower is installed locally
-  run_npm "install bower"
+
   echo "-----> Found bower.json, running bower install -g"
   bower install -g
 else
@@ -140,6 +142,8 @@ echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.
 ###### Yeoman Setup END #####
 
 ###### SBT Setup START #####
+
+cd $BUILD_DIR
 
 curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz | tar xz
 . bin/java
