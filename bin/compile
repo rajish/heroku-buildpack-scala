@@ -129,7 +129,7 @@ fi
 
 if [ -f $BUILD_DIR/$UI_FILES/grunt.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.coffee ]; then
   echo "-----> Found Gruntfile, running grunt task"
-  grunt install
+  grunt
   cd ..
 else
   echo "-----> No Gruntfile (grunt.js, Gruntfile.js, Gruntfile.coffee) found"
