@@ -108,6 +108,7 @@ echo "-----> Build dir in UI folder is $BUILD_DIR/$UI_FILES"
 echo "-----> Installing dependencies with npm"
 run_npm "install --production"
 run_npm "install -g yo"
+run_npm "install -g grunt-cli"
 run_npm "rebuild"
 echo "Dependencies installed" | indent
 
@@ -121,10 +122,7 @@ else
 fi
 
 if [ -f $BUILD_DIR/$UI_FILES/grunt.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.coffee ]; then
-  #make sure that grunt-cli and bower are installed locally
-  run_npm "install -g grunt-cli"
   echo "-----> Found Gruntfile, running grunt task"
-  cd $BUILD_DIR/$UI_FILES
   $BUILD_DIR/$UI_FILES/node_modules/.bin/grunt install
   cd ..
 else
