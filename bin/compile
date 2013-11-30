@@ -110,20 +110,21 @@ run_npm "install --production"
 run_npm "install -g yo"
 run_npm "install -g grunt-cli"
 run_npm "rebuild"
+echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
 echo "Dependencies installed" | indent
 
 if [ -f $BUILD_DIR/$UI_FILES/bower.json ]; then
   # make sure that bower is installed locally
   run_npm "install bower"
   echo "-----> Found bower.json, running bower install -g"
-  $BUILD_DIR/$UI_FILES/node_modules/.bin/bower install -g
+  bower install -g
 else
   echo "-----> No Bower.json found"
 fi
 
 if [ -f $BUILD_DIR/$UI_FILES/grunt.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.js ] || [ -f $BUILD_DIR/$UI_FILES/Gruntfile.coffee ]; then
   echo "-----> Found Gruntfile, running grunt task"
-  $BUILD_DIR/$UI_FILES/node_modules/.bin/grunt install
+  grunt install
   cd ..
 else
   echo "-----> No Gruntfile (grunt.js, Gruntfile.js, Gruntfile.coffee) found"
