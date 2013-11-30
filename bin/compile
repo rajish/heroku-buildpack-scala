@@ -108,8 +108,11 @@ echo "-----> Build dir in UI folder is $BUILD_DIR/$UI_FILES"
 echo "-----> Installing dependencies with npm"
 run_npm "install --production"
 run_npm "install -g yo"
+run_npm "install -g grunt"
 run_npm "install -g grunt-cli"
 run_npm "rebuild"
+
+mkdir -p $BUILD_DIR/.profile.d
 echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
 echo "Dependencies installed" | indent
 
@@ -131,7 +134,7 @@ else
 fi
 
 echo "-----> Building runtime environment"
-mkdir -p $BUILD_DIR/.profile.d
+
 echo "export PATH=\"\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
 
 ###### Yeoman Setup END #####
